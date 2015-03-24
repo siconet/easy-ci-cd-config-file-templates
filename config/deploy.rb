@@ -1,4 +1,3 @@
-set :application, 'my_app_name'
 set :repo_url, '{{GIT_REPO}}'
 
 # Branch options
@@ -11,6 +10,10 @@ set :branch, :master
 
 # Use :debug for more verbose output when troubleshooting
 set :log_level, :debug
+
+# Set composer path
+set :default_env, { path: "/usr/local/bin:$PATH" }
+SSHKit.config.command_map[:composer] = "#{shared_path}/composer.phar"
 
 # Apache users with .htaccess files:
 # it needs to be added to linked_files so it persists across deploys:
