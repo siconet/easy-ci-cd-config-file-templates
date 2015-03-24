@@ -19,6 +19,21 @@ set :linked_files, fetch(:linked_files, []).push('.env')
 set :linked_dirs, fetch(:linked_dirs, []).push('web/app/uploads')
 
 namespace :deploy do
+
+  desc "create WordPress files for symlinking"
+  task :create_wp_files do
+    on roles(:app) do
+      #execute :touch, "#{shared_path}/wp-config.php"
+      #execute :touch, "#{shared_path}/.htaccess"
+      execute :touch, "#{shared_path}/.env"
+      #execute :touch, "#{shared_path}/content/plugins/w3tc-wp-loader.php"
+    end
+  end
+
+  after 'check:make_linked_dirs', :create_wp_files
+end
+
+namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
