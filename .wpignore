@@ -1,0 +1,11 @@
+/lib
+/config
+Capfile
+Gemfile
+Gemfile.lock
+readme.md
+.gitattributes
+.gitignore
+.gitmodules
+.idea
+LICENSE.md
