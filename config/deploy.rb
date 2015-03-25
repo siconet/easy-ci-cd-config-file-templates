@@ -1,4 +1,5 @@
 set :repo_url, '{{GIT_REPO}}'
+set :subdir, "{{GIT_SUB_DIR}}" # relative path to project root in repo
 
 # Branch options
 # Prompts for the branch name (defaults to current branch)
@@ -11,15 +12,32 @@ set :branch, :master
 # Use :debug for more verbose output when troubleshooting
 set :log_level, :debug
 
+# use sudo
+set :use_sudo, true
+
 # Set composer path
 set :default_env, { path: "/usr/local/bin:$PATH" }
-SSHKit.config.command_map[:composer] = "#{shared_path}/composer.phar"
 
 # Apache users with .htaccess files:
 # it needs to be added to linked_files so it persists across deploys:
 # set :linked_files, fetch(:linked_files, []).push('.env', 'web/.htaccess')
 set :linked_files, fetch(:linked_files, []).push('.env')
 set :linked_dirs, fetch(:linked_dirs, []).push('web/app/uploads')
+
+namespace :deploy do
+
+  desc "Checkout subdirectory and delete all the other stuff"
+  task :checkout_subdir do
+    on roles(:app) do
+      execute "mv #{release_path}/#{fetch(:subdir)}/ /tmp"
+      execute "rm -rf #{release_path}/*"
+      execute "mv /tmp/#{fetch(:subdir)}/* #{release_path}"
+     end
+  end
+
+end
+
+after "deploy:symlink:linked_dirs", "deploy:checkout_subdir"
 
 namespace :deploy do
 

@@ -3,6 +3,8 @@ set :stage, :production
 set :application, 'example.com'
 set :deploy_to, -> { "/srv/www/#{fetch(:application)}" }
 
+SSHKit.config.command_map[:composer] = "#{shared_path}/composer.phar"
+
 # Simple Role Syntax
 # ==================
 #role :app, %w{deploy@example.com}
