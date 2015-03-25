@@ -29,9 +29,7 @@ namespace :deploy do
   desc "Checkout subdirectory and delete all the other stuff"
   task :checkout_subdir do
     on roles(:app) do
-      execute "mv #{release_path}/#{fetch(:subdir)}/ /tmp"
-      execute "rm -rf #{release_path}/*"
-      execute "mv /tmp/#{fetch(:subdir)}/* #{release_path}"
+      execute "mv --backup=numbered #{release_path}/#{fetch(:subdir)}/ /tmp && rm -rf #{release_path}/* && mv /tmp/#{fetch(:subdir)}/* #{release_path}"
      end
   end
 
