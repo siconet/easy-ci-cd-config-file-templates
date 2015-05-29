@@ -91,3 +91,15 @@ end
 # Note that you need to have WP-CLI installed on your server
 # Uncomment the following line to run it on deploys if needed
 # after 'deploy:publishing', 'deploy:update_option_paths'
+
+namespace :deploy do
+  desc 'Set correct file permissions'
+  task :fix_file_permissions do
+    on roles(:app) do
+      execute :chmod, "777 #{release_path}/web/app"
+    end
+  end
+end
+
+# The above fix_file_permissions task should be executed in order to fix file permissions
+after 'deploy:publishing', 'deploy:fix_file_permissions'
