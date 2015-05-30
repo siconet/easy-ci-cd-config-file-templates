@@ -97,6 +97,7 @@ namespace :deploy do
   task :fix_file_permissions do
     on roles(:app) do
       execute :chmod, "777 #{release_path}/web/app"
+      execute :chmod, "777 #{release_path}/web/app/*"
     end
   end
 end
